@@ -15,13 +15,13 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping(name = "/url")
+@RequestMapping("/url")
 public class UrlController {
 
     @Autowired
     private UrlService urlService;
 
-    @PostMapping("/short-url")
+    @PostMapping("/shorturl")
     public ResponseEntity<Map<String, String>> shortUrl(@RequestBody Map<String, String> request) {
 
         String original = request.get("url");
@@ -43,7 +43,7 @@ public class UrlController {
 
     }
 
-    @GetMapping("/{short-url}")
+    @GetMapping("/{shortUrl}")
     public ResponseEntity<Objects> redirect(@PathVariable String shortUrl) {
 
 
