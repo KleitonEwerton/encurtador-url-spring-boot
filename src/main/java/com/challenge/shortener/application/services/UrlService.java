@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,6 +28,7 @@ public class UrlService {
         return url.getShortUrl();
     }
 
+
     public String generateShortUrl() {
         String uppers = IntStream.rangeClosed('A', 'Z')
                 .mapToObj(c -> String.valueOf((char) c))
@@ -46,6 +48,22 @@ public class UrlService {
         }
 
         return shortUrl.toString();
+    }
+
+    public Optional<Url> getOriginalUrl(String shortUrl) {
+
+        Optional<Url> urlOptional = urlRepository.findByShortUrl(shortUrl);
+        if (urlOptional.isPresent()) {
+            Url url = urlOptional.get();
+            if (url.getInspirateData().isAfter(LocalDateTime.now())) {
+                return Optional.of(url);
+            } else {
+                urlRepository.delete(url);
+            }
+        }
+
+        return Optional.empty();
+
     }
 
 }

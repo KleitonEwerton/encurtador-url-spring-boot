@@ -1,14 +1,17 @@
 package com.challenge.shortener.application.controllers;
 
 
+import com.challenge.shortener.application.models.Url;
 import com.challenge.shortener.application.services.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @RestController
@@ -40,6 +43,21 @@ public class UrlController {
 
     }
 
+    @GetMapping("/{short-url}")
+    public ResponseEntity<Objects> redirect(@PathVariable String shortUrl) {
 
+
+        Optional<Url> originalUrl = urlService.getOriginalUrl(shortUrl);
+
+        if (originalUrl.isPresent()) {
+            Url url = originalUrl.get();
+            return ResponseEntity.status(200).location((URI.create(url.getOriginalUrl()))).build();
+        }
+
+        System.out.println("Not found URL or date expire");
+
+        return ResponseEntity.notFound().build();
+
+    }
 
 }
