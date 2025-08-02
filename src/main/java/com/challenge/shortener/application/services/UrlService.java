@@ -16,7 +16,7 @@ public class UrlService {
     @Autowired
     private UrlRepository urlRepository;
 
-    private String shortenUrl(String originalUrl) {
+    public String shortenUrl(String originalUrl) {
         String shortUrl = generateShortUrl();
         Url url = new Url();
         url.setOriginalUrl(originalUrl);
@@ -27,7 +27,7 @@ public class UrlService {
         return url.getShortUrl();
     }
 
-    private String generateShortUrl() {
+    public String generateShortUrl() {
         String uppers = IntStream.rangeClosed('A', 'Z')
                 .mapToObj(c -> String.valueOf((char) c))
                 .collect(Collectors.joining());
